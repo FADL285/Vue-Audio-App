@@ -1,9 +1,14 @@
+<script setup>
+import AppHeader from "@/components/AppHeader.vue";
+import AuthModal from "@/components/AuthModal.vue";
+</script>
+
 <template>
-  <!--  <nav>-->
-  <!--    <router-link to="/">Home</router-link> |-->
-  <!--    <router-link to="/about">About</router-link>-->
-  <!--  </nav>-->
+  <AppHeader />
   <router-view />
+  <Teleport to="body">
+    <AuthModal />
+  </Teleport>
 </template>
 
 <style></style>
