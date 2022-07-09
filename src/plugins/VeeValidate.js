@@ -16,6 +16,20 @@ export default {
 
     // Default values
     configure({
+      generateMessage: (context) => {
+        const messages = {
+          required: `This field ${context.field} is required.`,
+          min: `This field ${context.field} is too short.`,
+          max: `This field ${context.field} is too long.`,
+          alpha_spaces: `This field ${context.field} should only contain alphabetical characters.`,
+          email: `This field ${context.field} must be a valid email address.`,
+          confirmed: `The passwords don't match.`,
+          tos: `You must accept the terms of service.`,
+        };
+        return messages[context.rule.name]
+          ? messages[context.rule.name]
+          : `This field ${context.field} is invalid.`;
+      },
       validateOnBlur: true, // controls if `blur` events should trigger validation with `handleChange` handler
       validateOnChange: true, // controls if `change` events should trigger validation with `handleChange` handler
       validateOnInput: false, // controls if `input` events should trigger validation with `handleChange` handler
@@ -28,5 +42,6 @@ export default {
     defineRule("max", max);
     defineRule("alpha_spaces", alpha_spaces);
     defineRule("confirmed", confirmed);
+    defineRule("tos", required);
   },
 };

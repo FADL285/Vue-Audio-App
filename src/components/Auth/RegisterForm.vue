@@ -14,12 +14,15 @@
     <!-- Email -->
     <div class="mb-3">
       <label class="inline-block mb-2">Email</label>
-      <VeeField
-        name="email"
-        type="email"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-        placeholder="Enter Email"
-      />
+      <VeeField name="email" v-slot="{ field, meta }">
+        <input
+          type="email"
+          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          :class="{ 'border-red-300': !meta.valid && meta.touched }"
+          placeholder="Enter Your Email Address"
+          v-bind="field"
+        />
+      </VeeField>
       <ErrorMessage name="email" class="text-red-600" />
     </div>
     <!-- Password -->
@@ -90,7 +93,7 @@ export default {
         password: "required|min:3",
         confirm_password: "confirmed:@password",
         country: "required",
-        tos: "required",
+        tos: "tos",
       },
     };
   },

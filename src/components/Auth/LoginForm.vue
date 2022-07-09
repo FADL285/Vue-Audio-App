@@ -1,22 +1,26 @@
 <template>
-  <form>
+  <VeeForm @submit="submit" :validation-schema="validationSchema">
     <!-- Email -->
     <div class="mb-3">
       <label class="inline-block mb-2">Email</label>
-      <input
+      <VeeField
+        name="email"
         type="email"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Enter Email"
       />
+      <ErrorMessage name="email" class="text-red-600" />
     </div>
     <!-- Password -->
     <div class="mb-3">
       <label class="inline-block mb-2">Password</label>
-      <input
+      <VeeField
+        name="password"
         type="password"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Password"
       />
+      <ErrorMessage name="password" class="text-red-600" />
     </div>
     <button
       type="submit"
@@ -24,12 +28,25 @@
     >
       Submit
     </button>
-  </form>
+  </VeeForm>
 </template>
 
 <script>
 export default {
   name: "LoginForm",
+  data() {
+    return {
+      validationSchema: {
+        email: "required|email",
+        password: "required|min:3",
+      },
+    };
+  },
+  methods: {
+    submit(values) {
+      console.log(values);
+    },
+  },
 };
 </script>
 
