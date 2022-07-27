@@ -24,27 +24,63 @@
     </div>
     <button
       type="submit"
-      class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+      class="flex justify-center items-center w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+      :disabled="sendRequest"
     >
       Submit
+      <SpinnerIcon v-show="sendRequest" />
     </button>
   </VeeForm>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { errorAlert, successAlert } from "@/composables/useAuthMessage.js";
+import SpinnerIcon from "@/components/Icons/SpinnerIcon.vue";
+
 export default {
   name: "LoginForm",
+  components: { SpinnerIcon },
   data() {
     return {
       validationSchema: {
         email: "required|email",
         password: "required|min:3",
       },
+      sendRequest: false,
     };
   },
   methods: {
-    submit(values) {
-      console.log(values);
+    ...mapActions(["login"]),
+    generateLoginErrorMessage(errorCode) {
+      let message = "";
+      switch (errorCode) {
+        case "auth/invalid-email":
+          message = "Invalid Email Address. Provide a valid email address.";
+          break;
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          message =
+            "Sorry, we don't recognize that username or password. You can try again or create an account.";
+          break;
+        default:
+          message = "There is an error, Please try again.";
+      }
+      return message;
+    },
+    async submit(values, { resetForm }) {
+      this.sendRequest = true;
+      try {
+        await this.login(values);
+        successAlert("Login successful!");
+        resetForm();
+      } catch (error) {
+        // console.log(error.message);
+        const errorMessage = this.generateLoginErrorMessage(error.code);
+        errorAlert(errorMessage, false);
+      } finally {
+        this.sendRequest = false;
+      }
     },
   },
 };

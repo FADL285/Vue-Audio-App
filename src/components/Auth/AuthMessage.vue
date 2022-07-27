@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="alert.shown"
     class="flex items-center justify-between p-4 mb-3 rounded border"
     :class="
       isSuccessMessage
@@ -8,23 +9,15 @@
     "
     role="alert"
   >
-    <strong class="text-sm font-medium"><slot></slot></strong>
+    <strong class="text-sm font-medium">
+      {{ alert.message }}
+    </strong>
   </div>
 </template>
 
-<script>
-export default {
-  name: "AuthMessage",
-  props: {
-    type: {
-      type: String,
-      required: true,
-    },
-  },
-  computed: {
-    isSuccessMessage() {
-      return this.type === "success";
-    },
-  },
-};
+<script setup>
+import { computed } from "vue";
+import { alert } from "@/composables/useAuthMessage.js";
+
+const isSuccessMessage = computed(() => alert.type === "success");
 </script>

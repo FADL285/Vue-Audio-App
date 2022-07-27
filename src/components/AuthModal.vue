@@ -61,6 +61,8 @@
               </li>
             </ul>
 
+            <AuthMessage />
+
             <!-- Login Form -->
             <LoginForm v-show="isLoginModal" />
 
@@ -79,12 +81,14 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import { closeAlert } from "@/composables/useAuthMessage.js";
 import LoginForm from "@/components/Auth/LoginForm.vue";
 import RegisterForm from "@/components/Auth/RegisterForm.vue";
+import AuthMessage from "@/components/Auth/AuthMessage.vue";
 
 export default {
   name: "AuthModal",
-  components: { RegisterForm, LoginForm },
+  components: { AuthMessage, RegisterForm, LoginForm },
   data() {
     return {
       isLoginModal: true,
@@ -97,6 +101,7 @@ export default {
     ...mapMutations(["toggleAuthModal"]),
     changeModalType(isLogin) {
       this.isLoginModal = isLogin;
+      closeAlert();
     },
   },
 };

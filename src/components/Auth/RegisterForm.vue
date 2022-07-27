@@ -1,8 +1,5 @@
 <template>
   <VeeForm @submit="submit" :validation-schema="validationSchema">
-    <AuthMessage :type="authMessage.type" v-if="authMessage.shown">
-      {{ authMessage.content }}
-    </AuthMessage>
     <!-- Name -->
     <div class="mb-3">
       <label class="inline-block mb-2">Name</label>
@@ -83,20 +80,20 @@
       class="flex justify-center items-center w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
       :disabled="sendRequest"
     >
-      Submit <SpinnerIcon v-show="sendRequest" />
+      Submit
+      <SpinnerIcon v-show="sendRequest" />
     </button>
   </VeeForm>
 </template>
 
 <script>
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/plugins/firebase.js";
-import AuthMessage from "@/components/Auth/AuthMessage.vue";
+import { mapActions, mapMutations } from "vuex";
+import { successAlert, errorAlert } from "@/composables/useAuthMessage.js";
 import SpinnerIcon from "@/components/Icons/SpinnerIcon.vue";
 
 export default {
   name: "RegisterForm",
-  components: { SpinnerIcon, AuthMessage },
+  components: { SpinnerIcon },
   data() {
     return {
       validationSchema: {
@@ -107,37 +104,41 @@ export default {
         country: "required",
         tos: "tos",
       },
-      authMessage: {
-        type: "success",
-        shown: false,
-        content: "Success Alert",
-      },
       sendRequest: false,
     };
   },
+  computed: {
+    ...mapMutations(["toggleAuthModal"]),
+  },
   methods: {
-    async submit(values) {
+    ...mapActions(["register"]),
+    generateRegisterErrorMessage(errorCode) {
+      let message = "";
+      switch (errorCode) {
+        case "auth/email-already-in-use":
+          message = "Email have already been used. Please try another";
+          break;
+        case "auth/invalid-email":
+          message = "Invalid Email Address. Provide a valid email address.";
+          break;
+        case "auth/weak-password":
+          message = "Weak Password, Please provide strong password.";
+          break;
+        default:
+          message = "There is an error, Please try again.";
+      }
+      return message;
+    },
+    async submit(values, { resetForm }) {
       this.sendRequest = true;
       try {
-        const { user } = await createUserWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password
-        );
-        console.log(user);
-        this.authMessage.content =
-          "Your account has been created successfully!";
-        this.authMessage.shown = true;
+        await this.register(values);
+        successAlert("Your Account has been created successfully!");
+        resetForm();
       } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("ERROR CODE: " + errorCode);
-        console.log("ERROR message: " + errorMessage);
-        this.authMessage = {
-          type: "error",
-          content: errorCode,
-          shown: true,
-        };
+        // console.log(error.message);
+        const errorMessage = this.generateRegisterErrorMessage(error.code);
+        errorAlert(errorMessage, false);
       } finally {
         this.sendRequest = false;
       }
