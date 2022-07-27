@@ -2,6 +2,10 @@ a {
   transition: all 0.15s ease;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 /* text-yellow-500 */
 a:hover {
   color: #F59E0B;
