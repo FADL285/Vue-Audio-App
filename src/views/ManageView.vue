@@ -105,7 +105,7 @@
                   </button>
                   <button
                     type="button"
-                    class="py-1.5 px-3 rounded text-white bg-gray-600"
+                    class="py-1.5 px-3 mx-2 rounded text-white bg-gray-600"
                   >
                     Go Back
                   </button>

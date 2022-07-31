@@ -9,7 +9,11 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
   <header id="header" class="bg-gray-700">
     <nav class="container mx-auto flex justify-start items-center py-5 px-4">
       <!-- App Name -->
-      <router-link to="/" class="text-white font-bold uppercase text-2xl mr-4">
+      <router-link
+        to="/"
+        class="text-white hover:text-yellow-500 font-bold uppercase text-2xl mr-4"
+        exact-active-class="logo"
+      >
         Music
       </router-link>
 
@@ -18,13 +22,16 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
           <li>
-            <router-link :to="{ name: 'about' }" class="px-2 text-white">
+            <router-link
+              :to="{ name: 'about' }"
+              class="px-2 text-white hover:text-yellow-500"
+            >
               About
             </router-link>
           </li>
           <li v-if="!isUserLoggedIn">
             <a
-              class="px-2 text-white"
+              class="px-2 text-white hover:text-yellow-500"
               href="#"
               @click.prevent="ToggleAuthModal"
             >
@@ -33,12 +40,19 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
           </li>
           <template v-else>
             <li>
-              <router-link :to="{ name: 'manage' }" class="px-2 text-white">
+              <router-link
+                :to="{ name: 'manage' }"
+                class="px-2 text-white hover:text-yellow-500"
+              >
                 Manage
               </router-link>
             </li>
             <li>
-              <a class="px-2 text-white" href="#logout" @click.prevent="logout">
+              <a
+                class="px-2 text-white hover:text-yellow-500"
+                href="#logout"
+                @click.prevent="logout"
+              >
                 Logout
               </a>
             </li>
@@ -50,14 +64,17 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "AppHeader",
   computed: {
     ...mapState(["isUserLoggedIn"]),
   },
   methods: {
-    ...mapActions(["logout"]),
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push({ name: "home" });
+    },
   },
 };
 </script>
