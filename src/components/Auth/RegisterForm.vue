@@ -17,6 +17,7 @@
       <VeeField name="email" v-slot="{ field, meta }">
         <input
           type="email"
+          autocomplete="username"
           class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           :class="{ 'border-red-300': !meta.valid && meta.touched }"
           placeholder="Enter Your Email Address"
@@ -31,6 +32,7 @@
       <VeeField
         name="password"
         type="password"
+        autocomplete="new-password"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Password"
       />
@@ -42,6 +44,7 @@
       <VeeField
         name="confirm_password"
         type="password"
+        autocomplete="new-password"
         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         placeholder="Confirm Password"
       />
