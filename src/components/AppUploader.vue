@@ -1,0 +1,133 @@
+<template>
+  <div class="bg-white rounded border border-gray-200 relative flex flex-col">
+    <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+      <span class="card-title">Upload</span>
+      <i class="fas fa-upload float-right text-green-400 text-2xl"></i>
+    </div>
+    <div class="p-6">
+      <!-- Upload Dropbox -->
+      <div
+        class="w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
+        :class="{
+          'active-dropbox': isDragOver,
+        }"
+        @drag.prevent=""
+        @dragstart.prevent=""
+        @dragenter.prevent="isDragOver = true"
+        @dragend.prevent="isDragOver = false"
+        @dragleave.prevent="isDragOver = false"
+        @dragover.prevent="isDragOver = true"
+        @drop.prevent="uploadHandler"
+      >
+        <h5 class="text-lg">Drop your files here</h5>
+        <span class="text-opacity-80 text-xs mt-3">
+          [Maximum upload file size: {{ maxFileSizeInMB }}MB]
+        </span>
+      </div>
+      <hr class="my-6" />
+      <!-- Progess Bars -->
+      <div class="mb-4" v-for="upload in uploads" :key="upload.name">
+        <!-- File Name -->
+        <h5
+          class="font-semibold text-sm text-opacity-90 mb-0.5"
+          :class="upload.textClass"
+        >
+          <i :class="upload.icon"></i> {{ upload.name }}
+        </h5>
+        <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
+          <!-- Inner Progress Bar -->
+          <div
+            class="transition-all progress-bar"
+            :class="upload.variant"
+            :style="{ width: upload.currentProgress + '%' }"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { songsRef } from "@/plugins/firebase.js";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+
+export default {
+  name: "AppUploader",
+  data() {
+    return {
+      isDragOver: false,
+      supportedTypes: ["audio/mpeg", "audio/x-m4a"],
+      maxFileSizeInBytes: 200 * 1024 ** 2,
+      uploads: [],
+    };
+  },
+  computed: {
+    maxFileSizeInMB() {
+      return this.maxFileSizeInBytes / 1024 ** 2;
+    },
+  },
+  methods: {
+    getFileSizeInMB(sizeInBytes) {
+      return Math.round(sizeInBytes / 1024 ** 2);
+    },
+    uploadHandler(event) {
+      this.isDragOver = false;
+      const { files } = event.dataTransfer;
+      for (const file of files) {
+        if (!this.supportedTypes.includes(file.type)) continue;
+        if (!(file.size < this.maxFileSizeInBytes)) {
+          alert(
+            `File is too large [${this.getFileSizeInMB(
+              file.size
+            )}MB]. Maximum size is ${this.maxFileSizeInMB}MB`
+          );
+          continue;
+        }
+        const songRef = ref(songsRef, file.name);
+        const uploadTask = uploadBytesResumable(songRef, file);
+        const taskIndex =
+          this.uploads.push({
+            uploadTask,
+            currentProgress: 0,
+            name: file.name,
+            variant: "bg-blue-400",
+            icon: "fas fa-spinner fa-spin",
+            textClass: "",
+          }) - 1;
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            this.uploads[taskIndex].currentProgress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            //Handle unsuccessful upload
+            this.uploads[taskIndex].variant = "bg-red-400";
+            this.uploads[taskIndex].icon = "fas fa-times";
+            this.uploads[taskIndex].textClass = "text-red-400";
+            console.error("Upload is failed");
+            console.error(error);
+          },
+          () => {
+            // Handle Successful upload
+            this.uploads[taskIndex].variant = "bg-green-400";
+            this.uploads[taskIndex].icon = "fas fa-check";
+            this.uploads[taskIndex].textClass = "text-green-400";
+
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log("File available at", downloadURL);
+            });
+          }
+        );
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.active-dropbox {
+  @apply bg-green-400 border-green-400 border-solid text-white;
+}
+</style>
