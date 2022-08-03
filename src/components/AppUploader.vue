@@ -7,7 +7,7 @@
     <div class="p-6">
       <!-- Upload Dropbox -->
       <div
-        class="w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
+        class="group relative w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
         :class="{
           'active-dropbox': isDragOver,
         }"
@@ -19,8 +19,23 @@
         @dragover.prevent="isDragOver = true"
         @drop.prevent="uploadHandler"
       >
-        <h5 class="text-lg">Drop your files here</h5>
-        <span class="text-opacity-80 text-xs mt-3">
+        <img
+          class="h-16 m-auto transition-all group-hover:brightness-[40]"
+          src="https://filedropper.com/assets/themes/modern/img/upload-outline.svg"
+          alt="upload icon"
+        />
+        <input
+          class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          type="file"
+          accept="audio/mpeg,audio/x-m4a"
+          name="files"
+          multiple
+          title="Select Files to Upload"
+          @change="uploadHandler"
+        />
+        <h5 class="text-xl">Select Files to Upload</h5>
+        <h6 class="text-base mt-3.5">or Drag and Drop your files here</h6>
+        <span class="text-opacity-80 text-xs mt-4">
           [Maximum upload file size: {{ maxFileSizeInMB }}MB]
         </span>
       </div>
@@ -84,8 +99,7 @@ export default {
     },
     uploadHandler(event) {
       this.isDragOver = false;
-      const { files } = event.dataTransfer;
-      console.log(files);
+      const { files } = event.dataTransfer || event.target;
       for (const file of files) {
         if (!this.supportedTypes.includes(file.type)) continue;
         if (!(file.size < this.maxFileSizeInBytes)) {
