@@ -48,8 +48,9 @@
 </template>
 
 <script>
-import { songsRef } from "@/plugins/firebase.js";
+import { auth, db, songsRef } from "@/plugins/firebase.js";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
 
 export default {
   name: "AppUploader",
@@ -70,9 +71,21 @@ export default {
     getFileSizeInMB(sizeInBytes) {
       return Math.round(sizeInBytes / 1024 ** 2);
     },
+    handleSuccessUpload(fileIndex) {
+      this.uploads[fileIndex].variant = "bg-green-400";
+      this.uploads[fileIndex].icon = "fas fa-check";
+      this.uploads[fileIndex].textClass = "text-green-400";
+    },
+    handleFailureUpload(fileIndex, error) {
+      this.uploads[fileIndex].variant = "bg-red-400";
+      this.uploads[fileIndex].icon = "fas fa-times";
+      this.uploads[fileIndex].textClass = "text-red-400";
+      console.error("Upload is failed", error);
+    },
     uploadHandler(event) {
       this.isDragOver = false;
       const { files } = event.dataTransfer;
+      console.log(files);
       for (const file of files) {
         if (!this.supportedTypes.includes(file.type)) continue;
         if (!(file.size < this.maxFileSizeInBytes)) {
@@ -103,21 +116,26 @@ export default {
           },
           (error) => {
             //Handle unsuccessful upload
-            this.uploads[taskIndex].variant = "bg-red-400";
-            this.uploads[taskIndex].icon = "fas fa-times";
-            this.uploads[taskIndex].textClass = "text-red-400";
-            console.error("Upload is failed");
-            console.error(error);
+            this.handleFailureUpload(taskIndex, error);
           },
-          () => {
+          async () => {
             // Handle Successful upload
-            this.uploads[taskIndex].variant = "bg-green-400";
-            this.uploads[taskIndex].icon = "fas fa-check";
-            this.uploads[taskIndex].textClass = "text-green-400";
+            const songData = {
+              uid: auth.currentUser.uid,
+              displayName: auth.currentUser.displayName,
+              originalName: uploadTask.snapshot.ref.name,
+              modifiedName: uploadTask.snapshot.ref.name,
+              genre: "",
+              commentsCount: 0,
+            };
+            songData.url = await getDownloadURL(uploadTask.snapshot.ref);
+            try {
+              await addDoc(collection(db, "songs"), songData);
+            } catch (err) {
+              console.error("Error adding Song Details: ", err);
+            }
 
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log("File available at", downloadURL);
-            });
+            this.handleSuccessUpload(taskIndex);
           }
         );
       }
