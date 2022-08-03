@@ -5,7 +5,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <AppUploader />
+        <AppUploader ref="uploader" />
       </div>
       <div class="col-span-2">
         <div
@@ -137,5 +137,14 @@ import AppUploader from "@/components/AppUploader.vue";
 
 export default {
   components: { AppUploader },
+  beforeRouteLeave() {
+    if (this.$refs.uploader.hasActiveUploads) {
+      const answer = window.confirm(
+        "Do you really want to leave? you will cancel the uploads!"
+      );
+      if (!answer) return false;
+      this.$refs.uploader.cancelUploads();
+    }
+  },
 };
 </script>

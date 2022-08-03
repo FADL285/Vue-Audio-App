@@ -81,6 +81,9 @@ export default {
     maxFileSizeInMB() {
       return this.maxFileSizeInBytes / 1024 ** 2;
     },
+    hasActiveUploads() {
+      return this.uploads.some((upload) => upload.currentProgress < 100);
+    },
   },
   methods: {
     getFileSizeInMB(sizeInBytes) {
@@ -153,6 +156,11 @@ export default {
           }
         );
       }
+    },
+    cancelUploads() {
+      this.uploads.forEach((upload) => {
+        upload.uploadTask.cancel();
+      });
     },
   },
 };
