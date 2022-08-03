@@ -134,9 +134,35 @@
 </template>
 <script>
 import AppUploader from "@/components/AppUploader.vue";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { auth, db } from "@/plugins/firebase.js";
 
 export default {
+  data() {
+    return {
+      songs: [],
+    };
+  },
   components: { AppUploader },
+  methods: {
+    async fetchSongs() {
+      const q = query(
+        collection(db, "songs"),
+        where("uid", "==", auth.currentUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const song = {
+          docId: doc.id,
+          ...doc.data(),
+        };
+        this.songs.push(song);
+      });
+    },
+  },
+  async created() {
+    await this.fetchSongs();
+  },
   beforeRouteLeave() {
     if (this.$refs.uploader.hasActiveUploads) {
       const answer = window.confirm(
