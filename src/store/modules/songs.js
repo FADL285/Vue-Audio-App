@@ -5,8 +5,10 @@ import {
   query,
   updateDoc,
   where,
+  deleteDoc,
 } from "firebase/firestore";
-import { auth, db } from "@/plugins/firebase.js";
+import { deleteObject, ref } from "firebase/storage";
+import { auth, db, songsRef } from "@/plugins/firebase.js";
 
 export default {
   state: () => ({ userSongs: [] }),
@@ -18,6 +20,9 @@ export default {
       const updatedSong = state.userSongs.find((s) => s.id === song.id);
       updatedSong.modifiedName = song.modifiedName;
       updatedSong.genre = song.genre;
+    },
+    deleteSong(state, song) {
+      state.userSongs = state.userSongs.filter((s) => s.id !== song.id);
     },
   },
   actions: {
@@ -42,6 +47,17 @@ export default {
           genre: song.genre,
         });
         commit("updateSong", song);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async deleteSong({ commit }, song) {
+      const songRef = ref(songsRef, song.originalName);
+      try {
+        await deleteDoc(doc(db, "songs", song.id));
+        await deleteObject(songRef);
+        commit("deleteSong", song);
+        console.log("Delete Song Successfully");
       } catch (err) {
         console.error(err);
       }

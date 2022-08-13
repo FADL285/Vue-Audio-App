@@ -3,6 +3,7 @@
     <div>
       <h4 class="inline-block text-2xl font-bold">{{ song.modifiedName }}</h4>
       <button
+        @click="deleteSong"
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
       >
         <i class="fa fa-times"></i>
@@ -47,6 +48,11 @@ export default {
     async updateSong(song) {
       await this.$store.dispatch("updateSong", song);
       this.switchToEditMode(false);
+    },
+    async deleteSong() {
+      const answer = window.confirm("Do you really want to Delete this song?");
+      if (!answer) return false;
+      this.$store.dispatch("deleteSong", this.song);
     },
   },
 };
