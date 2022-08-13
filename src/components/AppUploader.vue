@@ -147,7 +147,9 @@ export default {
             };
             songData.url = await getDownloadURL(uploadTask.snapshot.ref);
             try {
-              await addDoc(collection(db, "songs"), songData);
+              const { id } = await addDoc(collection(db, "songs"), songData);
+              songData.id = id;
+              this.$store.commit("addUserSong", songData);
             } catch (err) {
               console.error("Error adding Song Details: ", err);
             }

@@ -34,7 +34,7 @@
 <script>
 import AppUploader from "@/components/AppUploader.vue";
 import MangeSong from "@/components/manage/MangeSong.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   data() {
@@ -44,13 +44,16 @@ export default {
     ...mapState({
       songs: (state) => state.songs.userSongs,
     }),
+    ...mapGetters(["userSongsListLength"]),
   },
   components: { MangeSong, AppUploader },
   methods: {
     ...mapActions(["fetchSongs"]),
   },
   async created() {
-    await this.fetchSongs();
+    if (this.userSongsListLength === 0) {
+      await this.fetchSongs();
+    }
   },
   beforeRouteLeave() {
     if (this.$refs.uploader.hasActiveUploads) {

@@ -63,5 +63,7 @@ export default {
       }
     },
   },
-  getters: {},
+  getters: {
+    userSongsListLength: (state) => state.userSongs.length,
+  },
 };
