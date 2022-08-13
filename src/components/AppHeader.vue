@@ -14,10 +14,10 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
         class="text-white hover:text-yellow-500 font-bold uppercase text-2xl mr-4"
         exact-active-class="logo"
       >
-        Music
+        &#9835; Music &#9835;
       </router-link>
 
-      <div class="flex flex-grow items-center">
+      <div class="flex justify-end flex-grow items-center">
         <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1">
           <!-- Navigation Links -->
@@ -53,7 +53,7 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
                 href="#logout"
                 @click.prevent="logout"
               >
-                Logout
+                Logout &#10150;
               </a>
             </li>
           </template>
