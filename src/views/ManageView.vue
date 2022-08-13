@@ -33,32 +33,21 @@
 </template>
 <script>
 import AppUploader from "@/components/AppUploader.vue";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { auth, db } from "@/plugins/firebase.js";
 import MangeSong from "@/components/manage/MangeSong.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   data() {
-    return {
-      songs: [],
-    };
+    return {};
+  },
+  computed: {
+    ...mapState({
+      songs: (state) => state.songs.userSongs,
+    }),
   },
   components: { MangeSong, AppUploader },
   methods: {
-    async fetchSongs() {
-      const q = query(
-        collection(db, "songs"),
-        where("uid", "==", auth.currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const song = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        this.songs.push(song);
-      });
-    },
+    ...mapActions(["fetchSongs"]),
   },
   async created() {
     await this.fetchSongs();

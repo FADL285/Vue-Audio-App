@@ -37,7 +37,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (to.meta.requiresAuth) {
-    if (!store.state.isUserLoggedIn) {
+    if (!store.state.users.isUserLoggedIn) {
       store.commit("toggleAuthModal");
       return { name: "home" };
     }

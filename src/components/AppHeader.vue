@@ -17,9 +17,9 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
         &#9835; Music &#9835;
       </router-link>
 
-      <div class="flex justify-end flex-grow items-center">
+      <div class="flex flex-grow items-center">
         <!-- Primary Navigation -->
-        <ul class="flex flex-row mt-1">
+        <ul class="flex flex-row w-full mt-1">
           <!-- Navigation Links -->
           <li>
             <router-link
@@ -29,7 +29,7 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
               About
             </router-link>
           </li>
-          <li v-if="!isUserLoggedIn">
+          <li v-if="!isUserLoggedIn" class="ml-auto">
             <a
               class="px-2 text-white hover:text-yellow-500"
               href="#"
@@ -47,7 +47,7 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
                 Manage
               </router-link>
             </li>
-            <li>
+            <li class="ml-auto">
               <a
                 class="px-2 text-white hover:text-yellow-500"
                 href="#logout"
@@ -68,7 +68,7 @@ import { mapState } from "vuex";
 export default {
   name: "AppHeader",
   computed: {
-    ...mapState(["isUserLoggedIn"]),
+    ...mapState({ isUserLoggedIn: (state) => state.users.isUserLoggedIn }),
   },
   methods: {
     logout() {

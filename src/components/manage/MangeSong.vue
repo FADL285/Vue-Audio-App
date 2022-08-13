@@ -18,12 +18,14 @@
       :song="song"
       v-if="inEditMode"
       @cancel="switchToEditMode(false)"
+      @update="updateSong"
     />
   </div>
 </template>
 
 <script>
 import ManageSongEditor from "@/components/manage/ManageSongEditor.vue";
+
 export default {
   name: "MangeSong",
   components: { ManageSongEditor },
@@ -41,6 +43,10 @@ export default {
   methods: {
     switchToEditMode(val) {
       this.inEditMode = val;
+    },
+    async updateSong(song) {
+      await this.$store.dispatch("updateSong", song);
+      this.switchToEditMode(false);
     },
   },
 };
