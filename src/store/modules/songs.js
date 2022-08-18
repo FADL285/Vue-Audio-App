@@ -2,6 +2,10 @@ import {
   collection,
   doc,
   getDocs,
+  getDoc,
+  startAfter,
+  limit,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -32,14 +36,52 @@ export default {
     },
   },
   actions: {
-    async fetchSongs({ commit }, type = ALL_SONGS) {
-      const q =
-        type === AUTH_SONGS
-          ? query(
-              collection(db, "songs"),
-              where("uid", "==", auth.currentUser.uid)
-            )
-          : collection(db, "songs");
+    async fetchSongs(
+      { state, commit, getters },
+      { type = ALL_SONGS, perPage = 10 }
+    ) {
+      let q;
+      // Type is all and first fetch
+      if (type === ALL_SONGS && getters.songsListLength === 0) {
+        q = query(
+          collection(db, "songs"),
+          orderBy("modifiedName"),
+          limit(perPage)
+        );
+      }
+      // Type is all and not last
+      else if (type === ALL_SONGS && getters.songsListLength !== 0) {
+        const lastDoc = await getDoc(doc(db, "songs", state.songs.at(-1).id));
+        q = query(
+          collection(db, "songs"),
+          orderBy("modifiedName"),
+          startAfter(lastDoc),
+          limit(perPage)
+        );
+      }
+      // Type is auth and first fetch
+      else if (type === AUTH_SONGS && getters.userSongsListLength === 0) {
+        q = query(
+          collection(db, "songs"),
+          where("uid", "==", auth.currentUser.uid),
+          orderBy("modifiedName"),
+          limit(perPage)
+        );
+      }
+      // Type is auth and not first fetch
+      else {
+        const lastDoc = await getDoc(
+          doc(db, "songs", state.userSongs.at(-1).id)
+        );
+        q = query(
+          collection(db, "songs"),
+          where("uid", "==", auth.currentUser.uid),
+          orderBy("modifiedName"),
+          startAfter(lastDoc),
+          limit(perPage)
+        );
+      }
+
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const song = {
