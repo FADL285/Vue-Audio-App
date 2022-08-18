@@ -10,9 +10,15 @@ import {
 import { deleteObject, ref } from "firebase/storage";
 import { auth, db, songsRef } from "@/plugins/firebase.js";
 
+const AUTH_SONGS = "auth";
+const ALL_SONGS = "all";
+
 export default {
-  state: () => ({ userSongs: [] }),
+  state: () => ({ userSongs: [], songs: [] }),
   mutations: {
+    addSong(state, song) {
+      state.songs.push(song);
+    },
     addUserSong(state, song) {
       state.userSongs.push(song);
     },
@@ -26,18 +32,23 @@ export default {
     },
   },
   actions: {
-    async fetchSongs({ commit }) {
-      const q = query(
-        collection(db, "songs"),
-        where("uid", "==", auth.currentUser.uid)
-      );
+    async fetchSongs({ commit }, type = ALL_SONGS) {
+      const q =
+        type === AUTH_SONGS
+          ? query(
+              collection(db, "songs"),
+              where("uid", "==", auth.currentUser.uid)
+            )
+          : collection(db, "songs");
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const song = {
           id: doc.id,
           ...doc.data(),
         };
-        commit("addUserSong", song);
+
+        if (type === ALL_SONGS) commit("addSong", song);
+        else commit("addUserSong", song);
       });
     },
     async updateSong({ commit }, song) {
@@ -65,5 +76,6 @@ export default {
   },
   getters: {
     userSongsListLength: (state) => state.userSongs.length,
+    songsListLength: (state) => state.songs.length,
   },
 };

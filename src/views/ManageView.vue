@@ -52,7 +52,7 @@ export default {
   },
   async created() {
     if (this.userSongsListLength === 0) {
-      await this.fetchSongs();
+      await this.fetchSongs("auth");
     }
   },
   beforeRouteLeave() {
