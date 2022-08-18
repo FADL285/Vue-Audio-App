@@ -1,12 +1,23 @@
 <script setup>
 import { useStore } from "vuex";
 import AppPlayer from "@/components/AppPlayer.vue";
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import SongItem from "@/components/SongItem.vue";
+import { useIntersectionObserver } from "@/composables/useIntersectionObserver.js";
 
+// Fetch Songs
 const store = useStore();
-if (store.getters.songsListLength === 0) store.dispatch("fetchSongs");
+if (store.getters.songsListLength === 0) store.dispatch("fetchSongs", {});
 const songs = computed(() => store.state.songs.songs);
+
+// Infinite Scroll Logic
+const loader = ref(null);
+const load = () => {
+  console.log("Load More Media..."); // TODO
+};
+onMounted(() => {
+  useIntersectionObserver(loader.value, load);
+});
 </script>
 
 <template>
@@ -48,6 +59,7 @@ const songs = computed(() => store.state.songs.songs);
         <song-item v-for="song in songs" :key="song.id" :song="song" />
       </ol>
       <!-- .. end Playlist -->
+      <span class="loader" ref="loader"></span>
     </div>
   </section>
 

@@ -52,7 +52,7 @@ export default {
   },
   async created() {
     if (this.userSongsListLength === 0) {
-      await this.fetchSongs("auth");
+      await this.fetchSongs({ type: "auth" });
     }
   },
   beforeRouteLeave() {
