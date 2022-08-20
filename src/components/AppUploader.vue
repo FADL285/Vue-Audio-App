@@ -151,7 +151,7 @@ export default {
               songData.id = id;
               this.$store.commit("addUserSong", songData);
             } catch (err) {
-              console.error("Error adding Song Details: ", err);
+              console.error("Error adding song Details: ", err);
             }
 
             this.handleSuccessUpload(taskIndex);

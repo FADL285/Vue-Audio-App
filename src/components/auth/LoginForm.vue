@@ -38,7 +38,7 @@
 <script>
 import { mapActions } from "vuex";
 import { errorAlert, successAlert } from "@/composables/useAuthMessage.js";
-import SpinnerIcon from "@/components/Icons/SpinnerIcon.vue";
+import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
 export default {
   name: "LoginForm",

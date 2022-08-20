@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import SpinnerIcon from "@/components/Icons/SpinnerIcon.vue";
+import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
 export default {
   name: "ManageSongEditor",

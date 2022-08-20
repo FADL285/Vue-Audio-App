@@ -1,5 +1,5 @@
 <template>
-  <!-- Auth Modal -->
+  <!-- auth Modal -->
   <Transition name="bounce">
     <div
       v-show="isAuthModalOpened"
@@ -82,9 +82,9 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import { closeAlert } from "@/composables/useAuthMessage.js";
-import LoginForm from "@/components/Auth/LoginForm.vue";
-import RegisterForm from "@/components/Auth/RegisterForm.vue";
-import AuthMessage from "@/components/Auth/AuthMessage.vue";
+import LoginForm from "@/components/auth/LoginForm.vue";
+import RegisterForm from "@/components/auth/RegisterForm.vue";
+import AuthMessage from "@/components/auth/AuthMessage.vue";
 
 export default {
   name: "AuthModal",
