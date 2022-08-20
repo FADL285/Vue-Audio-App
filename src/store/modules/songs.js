@@ -36,10 +36,7 @@ export default {
     },
   },
   actions: {
-    async fetchSongs(
-      { state, commit, getters },
-      { type = ALL_SONGS, perPage = 10 }
-    ) {
+    async fetchSongs({ commit, getters }, { type = ALL_SONGS, perPage = 10 }) {
       let q;
       // Type is all and first fetch
       if (type === ALL_SONGS && getters.songsListLength === 0) {
@@ -51,7 +48,7 @@ export default {
       }
       // Type is all and not last
       else if (type === ALL_SONGS && getters.songsListLength !== 0) {
-        const lastDoc = await getDoc(doc(db, "songs", state.songs.at(-1).id));
+        const lastDoc = await getDoc(doc(db, "songs", getters.songs.at(-1).id));
         q = query(
           collection(db, "songs"),
           orderBy("modifiedName"),
@@ -71,7 +68,7 @@ export default {
       // Type is auth and not first fetch
       else {
         const lastDoc = await getDoc(
-          doc(db, "songs", state.userSongs.at(-1).id)
+          doc(db, "songs", getters.userSongs.at(-1).id)
         );
         q = query(
           collection(db, "songs"),
@@ -110,13 +107,26 @@ export default {
         await deleteDoc(doc(db, "songs", song.id));
         await deleteObject(songRef);
         commit("deleteSong", song);
-        console.log("Delete Song Successfully");
+        console.log("Delete song Successfully");
       } catch (err) {
         console.error(err);
       }
     },
+    async fetchSong({ getters }, { id }) {
+      let song = getters.songs.find((s) => s.id === id);
+      if (song) return song;
+      try {
+        const songDoc = await getDoc(doc(db, "songs", id));
+        song = songDoc.data();
+      } catch (err) {
+        console.error(err);
+      }
+      return song;
+    },
   },
   getters: {
+    songs: (state) => state.songs,
+    userSongs: (state) => state.userSongs,
     userSongsListLength: (state) => state.userSongs.length,
     songsListLength: (state) => state.songs.length,
   },

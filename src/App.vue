@@ -2,6 +2,7 @@
 import { useStore } from "vuex";
 import AppHeader from "@/components/AppHeader.vue";
 import AuthModal from "@/components/AuthModal.vue";
+import AppPlayer from "@/components/AppPlayer.vue";
 
 const store = useStore();
 store.dispatch("autoLogin");
@@ -10,6 +11,7 @@ store.dispatch("autoLogin");
 <template>
   <AppHeader />
   <router-view />
+  <AppPlayer />
   <Teleport to="body">
     <AuthModal />
   </Teleport>

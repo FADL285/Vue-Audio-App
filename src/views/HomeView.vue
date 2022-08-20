@@ -1,6 +1,5 @@
 <script setup>
 import { useStore } from "vuex";
-import AppPlayer from "@/components/AppPlayer.vue";
 import { computed, onMounted, ref } from "vue";
 import SongItem from "@/components/SongItem.vue";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver.js";
@@ -62,6 +61,4 @@ onMounted(() => {
       <span class="loader" ref="loader"></span>
     </div>
   </section>
-
-  <AppPlayer />
 </template>
