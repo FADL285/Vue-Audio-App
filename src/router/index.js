@@ -22,6 +22,13 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/songs/:id",
+    name: "song",
+    props: true,
+    component: () =>
+      import(/* webpackChunkName: "song" */ "../views/SongView.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () =>
@@ -33,6 +40,18 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   linkExactActiveClass: "text-yellow-500",
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else if (to?.hash) {
+      return {
+        el: to.hash,
+        behavior: "smooth",
+      };
+    } else {
+      return { top: 0 };
+    }
+  },
 });
 
 router.beforeEach((to) => {
