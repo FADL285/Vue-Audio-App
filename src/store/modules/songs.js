@@ -1,5 +1,4 @@
 import {
-  collection,
   doc,
   getDocs,
   getDoc,
@@ -10,15 +9,23 @@ import {
   updateDoc,
   where,
   deleteDoc,
+  addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-import { auth, db, songsRef } from "@/plugins/firebase.js";
+import {
+  auth,
+  db,
+  songsRef,
+  songsCollection,
+  commentsCollection,
+} from "@/plugins/firebase.js";
 
 const AUTH_SONGS = "auth";
 const ALL_SONGS = "all";
 
 export default {
-  state: () => ({ userSongs: [], songs: [] }),
+  state: () => ({ userSongs: [], songs: [], comments: [] }),
   mutations: {
     addSong(state, song) {
       state.songs.push(song);
@@ -34,23 +41,22 @@ export default {
     deleteSong(state, song) {
       state.userSongs = state.userSongs.filter((s) => s.id !== song.id);
     },
+    addComment(state, comment) {
+      state.comments.push(comment);
+    },
   },
   actions: {
     async fetchSongs({ commit, getters }, { type = ALL_SONGS, perPage = 10 }) {
       let q;
       // Type is all and first fetch
       if (type === ALL_SONGS && getters.songsListLength === 0) {
-        q = query(
-          collection(db, "songs"),
-          orderBy("modifiedName"),
-          limit(perPage)
-        );
+        q = query(songsCollection, orderBy("modifiedName"), limit(perPage));
       }
       // Type is all and not last
       else if (type === ALL_SONGS && getters.songsListLength !== 0) {
         const lastDoc = await getDoc(doc(db, "songs", getters.songs.at(-1).id));
         q = query(
-          collection(db, "songs"),
+          songsCollection,
           orderBy("modifiedName"),
           startAfter(lastDoc),
           limit(perPage)
@@ -59,7 +65,7 @@ export default {
       // Type is auth and first fetch
       else if (type === AUTH_SONGS && getters.userSongsListLength === 0) {
         q = query(
-          collection(db, "songs"),
+          songsCollection,
           where("uid", "==", auth.currentUser.uid),
           orderBy("modifiedName"),
           limit(perPage)
@@ -71,7 +77,7 @@ export default {
           doc(db, "songs", getters.userSongs.at(-1).id)
         );
         q = query(
-          collection(db, "songs"),
+          songsCollection,
           where("uid", "==", auth.currentUser.uid),
           orderBy("modifiedName"),
           startAfter(lastDoc),
@@ -122,6 +128,22 @@ export default {
         console.error(err);
       }
       return song;
+    },
+    async addComment({ commit }, { songId, content }) {
+      try {
+        const comment = {
+          songId,
+          content,
+          authName: auth.currentUser.displayName,
+          authId: auth.currentUser.uid,
+          timestamp: serverTimestamp(),
+        };
+        const { id } = await addDoc(commentsCollection, comment);
+        comment.id = id;
+        commit("addComment", comment);
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
   getters: {

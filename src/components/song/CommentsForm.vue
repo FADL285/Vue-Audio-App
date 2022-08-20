@@ -7,18 +7,22 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
-          <textarea
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
+        <VeeForm :validation-schema="validationSchema" @submit="submit">
+          <VeeField
+            name="comment"
+            as="textarea"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Your comment here..."
-          ></textarea>
+          ></VeeField>
+          <ErrorMessage name="comment" class="text-red-600" />
+
           <button
             type="submit"
-            class="py-1.5 px-3 rounded text-white bg-green-600 block"
+            class="mt-4 py-1.5 px-3 rounded text-white bg-green-600 block"
           >
             Submit
           </button>
-        </form>
+        </VeeForm>
       </div>
     </div>
   </section>
@@ -27,6 +31,28 @@
 <script>
 export default {
   name: "CommentsForm",
+  data() {
+    return {
+      validationSchema: {
+        comment: "required|min:6",
+      },
+    };
+  },
+  props: {
+    id: {
+      required: true,
+      type: String,
+    },
+  },
+  methods: {
+    async submit(values, { resetForm }) {
+      await this.$store.dispatch("addComment", {
+        id: this.id,
+        content: values.comment,
+      });
+      resetForm();
+    },
+  },
 };
 </script>
 

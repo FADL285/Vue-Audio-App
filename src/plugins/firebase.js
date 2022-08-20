@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { collection, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage, ref } from "firebase/storage";
 
@@ -22,3 +22,5 @@ export const auth = getAuth(app);
 const storage = getStorage(app);
 
 export const songsRef = ref(storage, "songs");
+export const songsCollection = collection(db, "songs");
+export const commentsCollection = collection(db, "comments");

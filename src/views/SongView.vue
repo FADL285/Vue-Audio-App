@@ -21,7 +21,6 @@ const props = defineProps({
 const song = ref(null);
 (async () => {
   song.value = await store.dispatch("fetchSong", { id: props.id });
-  console.log(!song.value, song.value);
   if (!song.value) {
     await router.push({
       name: "NotFound",
@@ -60,7 +59,7 @@ const song = ref(null);
     </section>
 
     <!-- Comments Form -->
-    <CommentsForm />
+    <CommentsForm :id="props.id" />
     <!-- Comments -->
     <CommentsList />
   </template>

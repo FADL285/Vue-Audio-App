@@ -63,9 +63,9 @@
 </template>
 
 <script>
-import { auth, db, songsRef } from "@/plugins/firebase.js";
+import { auth, songsRef, songsCollection } from "@/plugins/firebase.js";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc } from "firebase/firestore";
 
 export default {
   name: "AppUploader",
@@ -147,7 +147,7 @@ export default {
             };
             songData.url = await getDownloadURL(uploadTask.snapshot.ref);
             try {
-              const { id } = await addDoc(collection(db, "songs"), songData);
+              const { id } = await addDoc(songsCollection, songData);
               songData.id = id;
               this.$store.commit("addUserSong", songData);
             } catch (err) {
