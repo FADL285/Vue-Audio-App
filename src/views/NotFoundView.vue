@@ -2,7 +2,7 @@
   <div class="404 text-center mt-10">
     <img
       class="max-w-md w-fit m-auto"
-      src="assets/img/404.svg"
+      src="/assets/img/404.svg"
       alt="404, the page you are looking for is not available."
     />
     <router-link

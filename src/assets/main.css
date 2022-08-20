@@ -17,6 +17,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(31 41 55);;
 }
+
+html {
+  scroll-padding-top: 2rem;
+  scroll-behavior: smooth;
+}
+
+
 /* End Scrollbar */
 a {
   transition: all 0.15s ease;
