@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import veeValidatePlugin from "@/plugins/VeeValidate";
+import toastificationPlugin from "@/plugins/toastification.js";
 // Firebase Configurations
 import "./plugins/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
@@ -18,6 +19,7 @@ onAuthStateChanged(auth, (user) => {
     app = createApp(App);
     app.use(store).use(router);
     app.use(veeValidatePlugin);
+    app.use(toastificationPlugin);
     app.mount("#app");
   }
 });

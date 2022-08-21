@@ -37,8 +37,9 @@
 
 <script>
 import { mapActions } from "vuex";
-import { errorAlert, successAlert } from "@/composables/useAuthMessage.js";
+import { errorAlert } from "@/composables/useAuthMessage.js";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "LoginForm",
@@ -50,6 +51,12 @@ export default {
         password: "required|min:3",
       },
       sendRequest: false,
+    };
+  },
+  setup() {
+    const toast = useToast();
+    return {
+      toast,
     };
   },
   methods: {
@@ -74,7 +81,7 @@ export default {
       this.sendRequest = true;
       try {
         await this.login(values);
-        successAlert("Login successful!");
+        this.toast.success("Login successfully!");
         resetForm();
       } catch (error) {
         // console.log(error.message);

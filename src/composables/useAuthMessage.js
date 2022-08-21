@@ -1,3 +1,5 @@
+// NOTE: Not used anymore...
+
 import { reactive } from "vue";
 
 export const alert = reactive({

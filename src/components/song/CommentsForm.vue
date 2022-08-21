@@ -47,7 +47,7 @@ export default {
   methods: {
     async submit(values, { resetForm }) {
       await this.$store.dispatch("addComment", {
-        id: this.id,
+        songId: this.id,
         content: values.comment,
       });
       resetForm();

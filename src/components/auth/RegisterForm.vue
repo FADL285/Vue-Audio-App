@@ -91,8 +91,9 @@
 
 <script>
 import { mapActions, mapMutations } from "vuex";
-import { successAlert, errorAlert } from "@/composables/useAuthMessage.js";
+import { errorAlert } from "@/composables/useAuthMessage.js";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "RegisterForm",
@@ -108,6 +109,12 @@ export default {
         tos: "tos",
       },
       sendRequest: false,
+    };
+  },
+  setup() {
+    const toast = useToast();
+    return {
+      toast,
     };
   },
   computed: {
@@ -136,7 +143,7 @@ export default {
       this.sendRequest = true;
       try {
         await this.register(values);
-        successAlert("Your Account has been created successfully!");
+        this.toast.success("Your Account has been created successfully!");
         resetForm();
       } catch (error) {
         // console.log(error.message);

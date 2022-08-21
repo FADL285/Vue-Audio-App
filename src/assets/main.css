@@ -101,7 +101,6 @@ input[type="file"]{
   animation: slide 50s linear infinite;
   will-change: background-position;
   background-image: url(/public/assets/img/song-header.png);
-  /* TODO: check if background is appearing  */
 }
 
 @keyframes progress-bar-stripes {
