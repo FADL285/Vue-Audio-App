@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
+
 export default {
   name: "CommentsForm",
   data() {
@@ -36,6 +38,12 @@ export default {
       validationSchema: {
         comment: "required|min:6",
       },
+    };
+  },
+  setup() {
+    const toast = useToast();
+    return {
+      toast,
     };
   },
   props: {
@@ -51,6 +59,7 @@ export default {
         content: values.comment,
       });
       resetForm();
+      this.toast.success("Comment added successfully");
     },
   },
 };

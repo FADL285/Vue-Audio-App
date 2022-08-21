@@ -26,6 +26,7 @@
 
 <script>
 import ManageSongEditor from "@/components/manage/ManageSongEditor.vue";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "MangeSong",
@@ -33,6 +34,12 @@ export default {
   data() {
     return {
       inEditMode: false,
+    };
+  },
+  setup() {
+    const toast = useToast();
+    return {
+      toast,
     };
   },
   props: {
@@ -48,11 +55,13 @@ export default {
     async updateSong(song) {
       await this.$store.dispatch("updateSong", song);
       this.switchToEditMode(false);
+      this.toast.success("Song updated successfully!");
     },
     async deleteSong() {
       const answer = window.confirm("Do you really want to Delete this song?");
       if (!answer) return false;
-      this.$store.dispatch("deleteSong", this.song);
+      await this.$store.dispatch("deleteSong", this.song);
+      this.toast.success("Song deleted successfully!");
     },
   },
 };
