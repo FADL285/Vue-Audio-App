@@ -10,7 +10,6 @@ import {
   where,
   deleteDoc,
   addDoc,
-  serverTimestamp,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import {
@@ -32,6 +31,9 @@ export default {
     },
     addUserSong(state, song) {
       state.userSongs.push(song);
+    },
+    clearUserSongs(state) {
+      state.userSongs = [];
     },
     updateSong(state, song) {
       const updatedSong = state.userSongs.find((s) => s.id === song.id);
@@ -136,7 +138,7 @@ export default {
           content,
           authName: auth.currentUser.displayName,
           authId: auth.currentUser.uid,
-          timestamp: serverTimestamp(),
+          timestamp: Date.now(),
         };
         const { id } = await addDoc(commentsCollection, comment);
         comment.id = id;
