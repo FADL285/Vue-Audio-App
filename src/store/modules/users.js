@@ -49,5 +49,7 @@ export default {
       commit("clearUserSongs");
     },
   },
-  getters: {},
+  getters: {
+    isLoggedIn: (state) => state.isUserLoggedIn,
+  },
 };

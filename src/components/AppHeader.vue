@@ -29,7 +29,7 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
               About
             </router-link>
           </li>
-          <li v-if="!isUserLoggedIn" class="ml-auto">
+          <li v-if="!isLoggedIn" class="ml-auto">
             <a
               class="px-2 text-white hover:text-yellow-500"
               href="#"
@@ -64,11 +64,11 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "AppHeader",
   computed: {
-    ...mapState({ isUserLoggedIn: (state) => state.users.isUserLoggedIn }),
+    ...mapGetters(["isLoggedIn"]),
   },
   methods: {
     logout() {

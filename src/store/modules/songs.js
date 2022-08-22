@@ -24,7 +24,7 @@ const AUTH_SONGS = "auth";
 const ALL_SONGS = "all";
 
 export default {
-  state: () => ({ userSongs: [], songs: [], comments: [] }),
+  state: () => ({ userSongs: [], songs: [], comments: {} }),
   mutations: {
     addSong(state, song) {
       state.songs.push(song);
@@ -44,7 +44,10 @@ export default {
       state.userSongs = state.userSongs.filter((s) => s.id !== song.id);
     },
     addComment(state, comment) {
-      state.comments.push(comment);
+      if (!state.comments[comment.songId]) {
+        state.comments[comment.songId] = [];
+      }
+      state.comments[comment.songId].push(comment);
     },
   },
   actions: {
@@ -144,8 +147,23 @@ export default {
         comment.id = id;
         commit("addComment", comment);
       } catch (err) {
-        console.error(err);
+        console.info(err);
       }
+    },
+    async fetchSongComments({ commit }, songId) {
+      const q = query(
+        commentsCollection,
+        where("songId", "==", songId),
+        orderBy("timestamp")
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const comment = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        commit("addComment", comment);
+      });
     },
   },
   getters: {
@@ -153,5 +171,6 @@ export default {
     userSongs: (state) => state.userSongs,
     userSongsListLength: (state) => state.userSongs.length,
     songsListLength: (state) => state.songs.length,
+    getSongComments: (state) => (songId) => state.comments[songId],
   },
 };

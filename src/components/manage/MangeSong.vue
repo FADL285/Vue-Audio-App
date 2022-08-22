@@ -1,7 +1,11 @@
 <template>
   <div class="border border-gray-200 p-3 mb-4 rounded">
     <div>
-      <h4 class="inline-block text-2xl font-bold">{{ song.modifiedName }}</h4>
+      <h4 class="inline-block text-2xl font-bold">
+        <router-link :to="{ name: 'song', params: { id: song.id } }">{{
+          song.modifiedName
+        }}</router-link>
+      </h4>
       <button
         @click="deleteSong"
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
@@ -10,6 +10,8 @@ const store = useStore();
 const router = useRouter();
 const route = useRoute();
 
+const isUserLoggedIn = computed(() => store.getters.isLoggedIn);
+
 const props = defineProps({
   id: {
     type: String,
@@ -19,6 +21,7 @@ const props = defineProps({
 
 // Fetch song from store if found or fetch it from the server
 const song = ref(null);
+const comments = computed(() => store.getters.getSongComments(props.id));
 (async () => {
   song.value = await store.dispatch("fetchSong", { id: props.id });
   if (!song.value) {
@@ -31,6 +34,12 @@ const song = ref(null);
       hash: route.hash,
     });
   }
+
+  if (!comments.value || comments.value?.length === 0) {
+    console.log("Load");
+    await store.dispatch("fetchSongComments", props.id);
+  }
+  console.log(comments.value);
 })();
 </script>
 
@@ -59,9 +68,16 @@ const song = ref(null);
     </section>
 
     <!-- Comments Form -->
-    <CommentsForm :id="props.id" />
+    <CommentsForm
+      :id="props.id"
+      v-if="isUserLoggedIn"
+      :comments-length="comments?.length ?? 0"
+    />
     <!-- Comments -->
-    <CommentsList />
+    <CommentsList
+      :comments="comments"
+      v-if="comments || comments?.length > 0"
+    />
   </template>
   <SpinnerIcon v-else class="mt-14" style="width: 70px; height: 70px" />
 </template>
