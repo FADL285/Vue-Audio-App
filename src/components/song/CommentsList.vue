@@ -1,3 +1,21 @@
+<script setup>
+import { defineProps } from "vue";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+defineProps({
+  comments: {
+    type: Array,
+    required: true,
+  },
+});
+
+// format time -:
+const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
+</script>
+
 <template>
   <section class="container mx-auto">
     <!-- Sort Comments -->
@@ -16,7 +34,7 @@
         <!-- Comment Author -->
         <div class="mb-5">
           <div class="font-bold">{{ comment.authName }}</div>
-          <time>{{ comment.timestamp }}</time>
+          <time>{{ dateFormat(comment.timestamp) }}</time>
         </div>
 
         <p>
@@ -26,17 +44,5 @@
     </ul>
   </section>
 </template>
-
-<script>
-export default {
-  name: "CommentsList",
-  props: {
-    comments: {
-      type: Array,
-      required: true,
-    },
-  },
-};
-</script>
 
 <style scoped></style>

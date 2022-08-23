@@ -36,10 +36,8 @@ const comments = computed(() => store.getters.getSongComments(props.id));
   }
 
   if (!comments.value || comments.value?.length === 0) {
-    console.log("Load");
     await store.dispatch("fetchSongComments", props.id);
   }
-  console.log(comments.value);
 })();
 </script>
 
