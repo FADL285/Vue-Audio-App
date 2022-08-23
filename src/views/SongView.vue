@@ -22,6 +22,24 @@ const props = defineProps({
 // Fetch song from store if found or fetch it from the server
 const song = ref(null);
 const comments = computed(() => store.getters.getSongComments(props.id));
+// Sort Comments by date
+const sortBy = ref(route.query.sort ?? "asc");
+const sortedComments = computed(() =>
+  comments.value?.slice()?.sort((a, b) => {
+    if (sortBy.value === "asc") return b.timestamp - a.timestamp;
+    return a.timestamp - b.timestamp;
+  })
+);
+const updateSortType = (sortType) => {
+  sortBy.value = sortType;
+  router.push({
+    query: {
+      sort: sortType,
+    },
+  });
+};
+
+// Fetch Song
 (async () => {
   song.value = await store.dispatch("fetchSong", { id: props.id });
   if (!song.value) {
@@ -44,7 +62,7 @@ const comments = computed(() => store.getters.getSongComments(props.id));
 <template>
   <template v-if="song"
     ><!-- Music Header -->
-    <section class="w-full mb-8 py-14 text-center text-white relative">
+    <section class="w-full mb-8 py-14 text-center text-white relative z-0">
       <div
         class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
         style="background-image: url(/assets/img/song-header.png)"
@@ -73,7 +91,8 @@ const comments = computed(() => store.getters.getSongComments(props.id));
     />
     <!-- Comments -->
     <CommentsList
-      :comments="comments"
+      :comments="sortedComments"
+      @sort="updateSortType"
       v-if="comments || comments?.length > 0"
     />
   </template>

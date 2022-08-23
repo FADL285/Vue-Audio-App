@@ -1,5 +1,6 @@
 <script setup>
-import { defineProps } from "vue";
+import { ref, defineProps, defineEmits } from "vue";
+import { useRoute } from "vue-router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -12,6 +13,12 @@ defineProps({
   },
 });
 
+const route = useRoute();
+
+const emit = defineEmits(["sort"]);
+const sortBy = ref(route.query.sort ?? "asc");
+const updateSortType = () => emit("sort", sortBy.value);
+
 // format time -:
 const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
 </script>
@@ -20,10 +27,12 @@ const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
   <section class="container mx-auto">
     <!-- Sort Comments -->
     <select
+      v-model="sortBy"
+      @change="updateSortType"
       class="block ml-auto mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
     >
-      <option value="1">Latest</option>
-      <option value="2">Oldest</option>
+      <option value="asc">Latest</option>
+      <option value="desc">Oldest</option>
     </select>
     <ul>
       <li
