@@ -1,3 +1,18 @@
+<script setup>
+import { useStore } from "vuex";
+import { computed } from "vue";
+
+const store = useStore();
+
+// play icon status
+const playIconStatus = computed(() =>
+  store.getters.isPlaying ? "fa-pause" : "fa-play"
+);
+
+// Toggle Song Playing Status
+const togglePlay = () => store.dispatch("togglePlay");
+</script>
+
 <template>
   <!-- Player -->
   <div
@@ -6,8 +21,8 @@
     <div class="relative">
       <!-- Play/Pause Button -->
       <div class="float-left w-7 h-7 leading-3">
-        <button type="button">
-          <i class="fa fa-play text-gray-500 text-xl"></i>
+        <button type="button" @click.prevent="togglePlay">
+          <i class="fa text-gray-500 text-xl" :class="playIconStatus"></i>
         </button>
       </div>
       <!-- Current Position -->
@@ -51,11 +66,5 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "AppPlayer",
-};
-</script>
 
 <style scoped></style>

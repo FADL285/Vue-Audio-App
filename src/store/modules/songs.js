@@ -19,12 +19,19 @@ import {
   songsCollection,
   commentsCollection,
 } from "@/plugins/firebase.js";
+import { Howl } from "howler";
 
 const AUTH_SONGS = "auth";
 const ALL_SONGS = "all";
 
 export default {
-  state: () => ({ userSongs: [], songs: [], comments: {} }),
+  state: () => ({
+    userSongs: [],
+    songs: [],
+    comments: {},
+    currentPlayingSong: null,
+    currentAudio: null,
+  }),
   mutations: {
     addSong(state, song) {
       state.songs.push(song);
@@ -48,6 +55,13 @@ export default {
         state.comments[comment.songId] = [];
       }
       state.comments[comment.songId].push(comment);
+    },
+    playNewSong(state, song) {
+      state.currentPlayingSong = song;
+      state.currentAudio = new Howl({
+        src: [song.url],
+        html5: true,
+      });
     },
   },
   actions: {
@@ -165,6 +179,16 @@ export default {
         commit("addComment", comment);
       });
     },
+    playNewSong({ commit, dispatch, state }, song) {
+      state.currentAudio?.stop();
+      commit("playNewSong", song);
+      dispatch("togglePlay");
+    },
+    togglePlay({ state }) {
+      if (!state.currentAudio.playing) return;
+      if (state.currentAudio.playing()) state.currentAudio.pause();
+      else state.currentAudio.play();
+    },
   },
   getters: {
     songs: (state) => state.songs,
@@ -172,5 +196,7 @@ export default {
     userSongsListLength: (state) => state.userSongs.length,
     songsListLength: (state) => state.songs.length,
     getSongComments: (state) => (songId) => state.comments[songId],
+    isPlaying: (state) => !!state.currentAudio?.playing(),
+    getCurrentAudio: (state) => state.currentPlayingSong,
   },
 };

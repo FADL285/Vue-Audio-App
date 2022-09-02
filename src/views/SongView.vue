@@ -57,6 +57,25 @@ const updateSortType = (sortType) => {
     await store.dispatch("fetchSongComments", props.id);
   }
 })();
+
+// Check if song is current audio
+const isCurrentAudio = computed(() => {
+  const currentAudio = store.getters.getCurrentAudio;
+  return currentAudio?.url === song.value.url;
+});
+
+// Toggle Current Song Playing Status
+const togglePlay = () => {
+  if (!isCurrentAudio.value) store.dispatch("playNewSong", song.value);
+  else store.dispatch("togglePlay");
+};
+
+const playIconStatus = computed(() => {
+  if (isCurrentAudio.value) {
+    return store.getters.isPlaying ? "fa-pause" : "fa-play";
+  }
+  return "fa-play";
+});
 </script>
 
 <template>
@@ -72,8 +91,9 @@ const updateSortType = (sortType) => {
         <button
           type="button"
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+          @click.prevent="togglePlay"
         >
-          <i class="fas fa-play"></i>
+          <i class="fas" :class="playIconStatus"></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- song Info -->
