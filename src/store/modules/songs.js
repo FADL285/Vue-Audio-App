@@ -31,6 +31,8 @@ export default {
     comments: {},
     currentPlayingSong: null,
     currentAudio: null,
+    playerSongDuration: "00:00",
+    playerSongCurrentTime: "00:00",
   }),
   mutations: {
     addSong(state, song) {
@@ -62,6 +64,15 @@ export default {
         src: [song.url],
         html5: true,
       });
+    },
+    stopCurrentSong(state) {
+      state.currentAudio?.stop();
+    },
+    setCurrentSongDuration(state) {
+      state.playerSongDuration = state.currentAudio.duration();
+    },
+    updateCurrentSongCurrentTime(state) {
+      state.playerSongCurrentTime = state.currentAudio.seek();
     },
   },
   actions: {
@@ -179,15 +190,27 @@ export default {
         commit("addComment", comment);
       });
     },
-    playNewSong({ commit, dispatch, state }, song) {
-      state.currentAudio?.stop();
+    playNewSong({ commit, dispatch }, song) {
+      commit("stopCurrentSong");
       commit("playNewSong", song);
       dispatch("togglePlay");
     },
-    togglePlay({ state }) {
+    togglePlay({ state, dispatch, commit }) {
       if (!state.currentAudio.playing) return;
       if (state.currentAudio.playing()) state.currentAudio.pause();
-      else state.currentAudio.play();
+      else {
+        state.currentAudio.play();
+        state.currentAudio.on("play", () => {
+          commit("setCurrentSongDuration");
+          dispatch("updateProgress");
+        });
+      }
+    },
+    updateProgress({ commit, state, dispatch }) {
+      commit("updateCurrentSongCurrentTime");
+      if (state.currentAudio.playing()) {
+        requestAnimationFrame(() => dispatch("updateProgress"));
+      }
     },
   },
   getters: {

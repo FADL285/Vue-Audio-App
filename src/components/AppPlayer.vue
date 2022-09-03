@@ -1,8 +1,16 @@
 <script setup>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+
+dayjs.extend(duration);
 
 const store = useStore();
+
+// Player Song Duration & CurrentTime
+const songDuration = computed(() => store.state.songs.playerSongDuration);
+const currentTime = computed(() => store.state.songs.playerSongCurrentTime);
 
 // play icon status
 const playIconStatus = computed(() =>
@@ -14,6 +22,9 @@ const togglePlay = () => store.dispatch("togglePlay");
 
 // Get Current Audio Info
 const currentAudio = computed(() => store.getters.getCurrentAudio);
+
+// Convert Seconds to Time Format
+const formatTime = (seconds) => dayjs.duration(seconds * 1000).format("mm:ss");
 </script>
 
 <template>
@@ -34,7 +45,7 @@ const currentAudio = computed(() => store.getters.getCurrentAudio);
         <div
           class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-5 mt-1"
         >
-          <span class="player-currenttime">00:00</span>
+          <span class="player-currenttime">{{ formatTime(currentTime) }}</span>
         </div>
         <!-- Scrub -->
         <div class="float-left w-7 h-7 leading-3 ml-7 mt-2 player-scrub">
@@ -66,7 +77,7 @@ const currentAudio = computed(() => store.getters.getCurrentAudio);
         <div
           class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-8 mt-1"
         >
-          <span class="player-duration">03:06</span>
+          <span class="player-duration">{{ formatTime(songDuration) }}</span>
         </div>
       </div>
     </div>

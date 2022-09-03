@@ -54,9 +54,10 @@ onMounted(() => {
         <i class="fa fa-headphones-alt float-right text-green-400 text-xl"></i>
       </div>
       <!-- Playlist -->
-      <ol id="playlist">
+      <ol id="playlist" v-if="songs?.length">
         <song-item v-for="song in songs" :key="song.id" :song="song" />
       </ol>
+      <p v-else class="text-center py-28 text-4xl">No Songs Found...</p>
       <!-- .. end Playlist -->
       <span class="loader" ref="loader"></span>
     </div>
