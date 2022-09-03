@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <div class="about container mx-auto px-4 text-2xl mt-10">
-    <h1 class="text-4xl mb-5 text-center font-mono">This is an about page</h1>
+  <div class="about container mx-auto mt-10 px-4 text-2xl">
+    <h1 class="mb-5 text-center font-mono text-4xl">This is an about page</h1>
     <p class="mb-3">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad atque beatae
       consequuntur cumque doloremque dolores doloribus exercitationem explicabo

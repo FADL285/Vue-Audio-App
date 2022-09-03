@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-center items-center mx-2">
+  <div class="mx-2 flex items-center justify-center">
     <div
-      class="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-900"
+      class="h-3 w-3 animate-spin rounded-full border-b-2 border-gray-900"
       v-bind="$attrs"
     ></div>
   </div>

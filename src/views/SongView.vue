@@ -81,21 +81,21 @@ const playIconStatus = computed(() => {
 <template>
   <template v-if="song"
     ><!-- Music Header -->
-    <section class="w-full mb-8 py-14 text-center text-white relative z-0">
+    <section class="relative z-0 mb-8 w-full py-14 text-center text-white">
       <div
-        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
+        class="music-bg absolute inset-0 box-border h-full w-full bg-contain"
         style="background-image: url(/assets/img/song-header.png)"
       ></div>
       <div class="container mx-auto flex items-center justify-center">
         <!-- Play/Pause Button -->
         <button
           type="button"
-          class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+          class="z-50 h-24 w-24 rounded-full bg-white text-3xl text-black focus:outline-none"
           @click.prevent="togglePlay"
         >
           <i class="fas" :class="playIconStatus"></i>
         </button>
-        <div class="z-50 text-left ml-8">
+        <div class="z-50 ml-8 text-left">
           <!-- song Info -->
           <div class="text-3xl font-bold">{{ song.modifiedName }}</div>
           <div>{{ song.genre }}</div>

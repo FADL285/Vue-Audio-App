@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="alert.shown"
-    class="flex items-center justify-between p-4 mb-3 rounded border"
+    class="mb-3 flex items-center justify-between rounded border p-4"
     :class="
       isSuccessMessage
         ? 'border-green-900/10 bg-green-50 text-green-700'

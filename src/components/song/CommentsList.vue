@@ -29,7 +29,7 @@ const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
     <select
       v-model="sortBy"
       @change="updateSortType"
-      class="block ml-auto mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+      class="ml-auto mt-4 block rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
     >
       <option value="asc">Latest</option>
       <option value="desc">Oldest</option>
@@ -38,7 +38,7 @@ const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
       <li
         v-for="comment in comments"
         :key="comment.id"
-        class="p-6 bg-gray-50 border border-gray-200"
+        class="border border-gray-200 bg-gray-50 p-6"
       >
         <!-- Comment Author -->
         <div class="mb-5">

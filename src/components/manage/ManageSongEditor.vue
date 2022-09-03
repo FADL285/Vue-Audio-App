@@ -5,22 +5,22 @@
     class="mt-3.5"
   >
     <div class="mb-3">
-      <label class="inline-block mb-1">Song Title</label>
+      <label class="mb-1 inline-block">Song Title</label>
       <VeeField
         name="title"
         type="text"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Enter Song Title"
         :value="song.modifiedName"
       />
       <ErrorMessage name="title" class="text-red-600" />
     </div>
     <div class="mb-3">
-      <label class="inline-block mb-1">Genre</label>
+      <label class="mb-1 inline-block">Genre</label>
       <VeeField
         name="genre"
         type="text"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Enter Genre"
         :value="song.genre"
       />
@@ -29,7 +29,7 @@
     <button
       type="submit"
       :disabled="sendRequest"
-      class="inline-flex justify-center items-center w-32 py-1.5 px-3 rounded text-white bg-green-600"
+      class="inline-flex w-32 items-center justify-center rounded bg-green-600 py-1.5 px-3 text-white"
     >
       Submit
       <SpinnerIcon v-show="sendRequest" />
@@ -37,7 +37,7 @@
     <button
       type="button"
       :disabled="sendRequest"
-      class="w-32 py-1.5 px-3 mx-2 rounded text-white bg-gray-600"
+      class="mx-2 w-32 rounded bg-gray-600 py-1.5 px-3 text-white"
       @click="cancelEditing"
     >
       Cancel

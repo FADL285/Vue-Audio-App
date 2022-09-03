@@ -1,19 +1,19 @@
 <template>
-  <div class="404 text-center mt-10">
+  <div class="404 mt-10 text-center">
     <img
-      class="max-w-md w-fit m-auto"
+      class="m-auto w-fit max-w-md"
       src="/assets/img/404.svg"
       alt="404, the page you are looking for is not available."
     />
     <router-link
-      class="relative inline-flex items-center px-8 py-3 overflow-hidden text-gray-700 border border-current rounded group active:text-gray-600 focus:outline-none focus:ring"
+      class="group relative inline-flex items-center overflow-hidden rounded border border-current px-8 py-3 text-gray-700 focus:outline-none focus:ring active:text-gray-600"
       to="/"
     >
       <span
-        class="absolute right-0 transition-transform translate-x-full group-hover:-translate-x-4"
+        class="absolute right-0 translate-x-full transition-transform group-hover:-translate-x-4"
       >
         <svg
-          class="w-5 h-5"
+          class="h-5 w-5"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray-200 p-3 mb-4 rounded">
+  <div class="mb-4 rounded border border-gray-200 p-3">
     <div>
       <h4 class="inline-block text-2xl font-bold">
         <router-link :to="{ name: 'song', params: { id: song.id } }">{{
@@ -8,13 +8,13 @@
       </h4>
       <button
         @click="deleteSong"
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        class="float-right ml-1 rounded bg-red-600 py-1 px-2 text-sm text-white"
       >
         <i class="fa fa-times"></i>
       </button>
       <button
         @click="switchToEditMode(true)"
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right"
+        class="float-right ml-1 rounded bg-blue-600 py-1 px-2 text-sm text-white"
       >
         <i class="fa fa-pencil-alt"></i>
       </button>

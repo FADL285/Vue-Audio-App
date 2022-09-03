@@ -21,15 +21,15 @@ onMounted(() => {
 
 <template>
   <!-- Introduction -->
-  <section class="mb-8 py-20 text-white text-center relative">
+  <section class="relative mb-8 py-20 text-center text-white">
     <div
-      class="absolute inset-0 w-full h-full bg-contain introduction-bg"
+      class="introduction-bg absolute inset-0 h-full w-full bg-contain"
       style="background-image: url(/assets/img/header.png)"
     ></div>
     <div class="container mx-auto">
-      <div class="text-white main-header-content">
-        <h1 class="font-bold text-5xl mb-5">Listen to Great Music!</h1>
-        <p class="w-full md:w-8/12 mx-auto">
+      <div class="main-header-content text-white">
+        <h1 class="mb-5 text-5xl font-bold">Listen to Great Music!</h1>
+        <p class="mx-auto w-full md:w-8/12">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et
           dolor mollis, congue augue non, venenatis elit. Nunc justo eros,
           suscipit ac aliquet imperdiet, venenatis et sapien. Duis sed magna
@@ -39,7 +39,7 @@ onMounted(() => {
     </div>
 
     <img
-      class="relative block mx-auto mt-5 -mb-20 w-auto max-w-full"
+      class="relative mx-auto mt-5 -mb-20 block w-auto max-w-full"
       src="/assets/img/introduction-music.png"
       alt="music images"
     />
@@ -47,17 +47,17 @@ onMounted(() => {
 
   <!-- Main Content -->
   <section class="container mx-auto">
-    <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-      <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+    <div class="relative flex flex-col rounded border border-gray-200 bg-white">
+      <div class="border-b border-gray-200 px-6 pt-6 pb-5 font-bold">
         <span class="card-title">Songs</span>
         <!-- Icon -->
-        <i class="fa fa-headphones-alt float-right text-green-400 text-xl"></i>
+        <i class="fa fa-headphones-alt float-right text-xl text-green-400"></i>
       </div>
       <!-- Playlist -->
       <ol id="playlist" v-if="songs?.length">
         <song-item v-for="song in songs" :key="song.id" :song="song" />
       </ol>
-      <p v-else class="text-center py-28 text-4xl">No Songs Found...</p>
+      <p v-else class="py-28 text-center text-4xl">No Songs Found...</p>
       <!-- .. end Playlist -->
       <span class="loader" ref="loader"></span>
     </div>

@@ -7,11 +7,11 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
 <template>
   <!-- Header -->
   <header id="header" class="bg-gray-700">
-    <nav class="container mx-auto flex justify-start items-center py-5 px-4">
+    <nav class="container mx-auto flex items-center justify-start py-5 px-4">
       <!-- App Name -->
       <router-link
         to="/"
-        class="text-white hover:text-yellow-500 font-bold uppercase text-2xl mr-4"
+        class="mr-4 text-2xl font-bold uppercase text-white hover:text-yellow-500"
         exact-active-class="logo"
       >
         &#9835; Music &#9835;
@@ -19,7 +19,7 @@ const ToggleAuthModal = () => store.commit("toggleAuthModal");
 
       <div class="flex flex-grow items-center">
         <!-- Primary Navigation -->
-        <ul class="flex flex-row w-full mt-1">
+        <ul class="mt-1 flex w-full flex-row">
           <!-- Navigation Links -->
           <li>
             <router-link

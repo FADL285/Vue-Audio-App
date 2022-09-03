@@ -2,23 +2,23 @@
   <VeeForm @submit="submit" :validation-schema="validationSchema">
     <!-- Name -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Name</label>
+      <label class="mb-2 inline-block">Name</label>
       <VeeField
         name="name"
         type="text"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Enter Name"
       />
       <ErrorMessage name="name" class="text-red-600" />
     </div>
     <!-- Email -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Email</label>
+      <label class="mb-2 inline-block">Email</label>
       <VeeField name="email" v-slot="{ field, meta }">
         <input
           type="email"
           autocomplete="username"
-          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
           :class="{ 'border-red-300': !meta.valid && meta.touched }"
           placeholder="Enter Your Email Address"
           v-bind="field"
@@ -28,36 +28,36 @@
     </div>
     <!-- Password -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Password</label>
+      <label class="mb-2 inline-block">Password</label>
       <VeeField
         name="password"
         type="password"
         autocomplete="new-password"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Password"
       />
       <ErrorMessage name="password" class="text-red-600" />
     </div>
     <!-- Confirm Password -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Confirm Password</label>
+      <label class="mb-2 inline-block">Confirm Password</label>
       <VeeField
         name="confirm_password"
         type="password"
         autocomplete="new-password"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Confirm Password"
       />
       <ErrorMessage name="confirm_password" class="text-red-600" />
     </div>
     <!-- Country -->
     <div class="mb-3">
-      <label class="inline-block mb-2" for="country">Country</label>
+      <label class="mb-2 inline-block" for="country">Country</label>
       <VeeField
         as="select"
         name="country"
         id="country"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
       >
         <option value="Egypt">Egypt</option>
         <option value="USA">USA</option>
@@ -73,14 +73,14 @@
         id="tos"
         type="checkbox"
         value="1"
-        class="w-4 h-4 float-left -ml-6 mt-1 rounded"
+        class="float-left -ml-6 mt-1 h-4 w-4 rounded"
       />
       <label class="inline-block" for="tos">Accept terms of service</label>
-      <ErrorMessage name="tos" class="text-red-600 block" />
+      <ErrorMessage name="tos" class="block text-red-600" />
     </div>
     <button
       type="submit"
-      class="flex justify-center items-center w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+      class="flex w-full items-center justify-center rounded bg-purple-600 py-1.5 px-3 text-white transition hover:bg-purple-700"
       :disabled="sendRequest"
     >
       Submit

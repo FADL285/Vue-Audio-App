@@ -32,36 +32,36 @@ const formatTime = (seconds) => dayjs.duration(seconds * 1000).format("mm:ss");
   <Transition name="slide-fade">
     <div
       v-if="currentAudio"
-      class="fixed bottom-0 left-0 bg-white p-5 pb-4 text-left align-top w-full h-16"
+      class="fixed bottom-0 left-0 h-16 w-full bg-white p-5 pb-4 text-left align-top shadow-xl shadow-inner"
     >
       <div class="relative">
         <!-- Play/Pause Button -->
-        <div class="float-left w-7 h-7 leading-3">
+        <div class="float-left h-7 w-7 leading-3">
           <button type="button" @click.prevent="togglePlay">
-            <i class="fa text-gray-500 text-xl" :class="playIconStatus"></i>
+            <i class="fa text-xl text-gray-500" :class="playIconStatus"></i>
           </button>
         </div>
         <!-- Current Position -->
         <div
-          class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-5 mt-1"
+          class="float-left mt-0 ml-5 mt-1 h-7 w-7 w-14 text-lg leading-3 text-gray-400"
         >
           <span class="player-currenttime">{{ formatTime(currentTime) }}</span>
         </div>
         <!-- Scrub -->
-        <div class="float-left w-7 h-7 leading-3 ml-7 mt-2 player-scrub">
+        <div class="player-scrub float-left ml-7 mt-2 h-7 w-7 leading-3">
           <div
-            class="absolute left-0 right-0 text-lg text-center mx-auto player-song-info"
+            class="player-song-info absolute left-0 right-0 mx-auto text-center text-lg"
           >
             <span class="song-title">{{ currentAudio?.modifiedName }}</span> by
             <span class="song-artist">{{ currentAudio?.displayName }}</span>
           </div>
           <!-- Scrub Container  -->
           <span
-            class="block w-full h-2 rounded m-1 mt-2 bg-gray-200 relative cursor-pointer"
+            class="relative m-1 mt-2 block h-2 w-full cursor-pointer rounded bg-gray-200"
           >
             <!-- Player Ball -->
             <span
-              class="absolute top-neg-8 text-gray-800 text-lg"
+              class="top-neg-8 absolute text-lg text-gray-800"
               style="left: 50%"
             >
               <i class="fas fa-circle"></i>
@@ -75,7 +75,7 @@ const formatTime = (seconds) => dayjs.duration(seconds * 1000).format("mm:ss");
         </div>
         <!-- Duration -->
         <div
-          class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-8 mt-1"
+          class="float-left mt-0 ml-8 mt-1 h-7 w-7 w-14 text-lg leading-3 text-gray-400"
         >
           <span class="player-duration">{{ formatTime(songDuration) }}</span>
         </div>
