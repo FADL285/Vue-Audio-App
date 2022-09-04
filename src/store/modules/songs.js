@@ -27,7 +27,6 @@ const ALL_SONGS = "all";
 
 export default {
   state: () => ({
-    userSongs: [],
     songs: [],
     comments: {},
     currentPlayingSong: null,
@@ -40,13 +39,12 @@ export default {
       state.songs.push(song);
     },
     addUserSong(state, song) {
-      state.userSongs.push(song);
-    },
-    clearUserSongs(state) {
-      state.userSongs = [];
+      state.songs.push(song);
     },
     updateSong(state, song) {
-      const updatedSong = state.userSongs.find((s) => s.id === song.id);
+      const updatedSong = state.songs.find(
+        (s) => s.id === song.id && s.uid === auth.currentUser?.uid
+      );
       updatedSong.modifiedName = song.modifiedName;
       updatedSong.genre = song.genre;
     },
@@ -55,7 +53,7 @@ export default {
       if (song) song.commentsCount++;
     },
     deleteSong(state, song) {
-      state.userSongs = state.userSongs.filter((s) => s.id !== song.id);
+      state.songs = state.songs.filter((s) => s.id !== song.id);
     },
     addComment(state, comment) {
       if (!state.comments[comment.songId]) {
@@ -243,9 +241,15 @@ export default {
     },
   },
   getters: {
-    songs: (state) => state.songs,
-    userSongs: (state) => state.userSongs,
-    userSongsListLength: (state) => state.userSongs.length,
+    songs: (state) =>
+      state.songs.sort((a, b) => a.modifiedName.localeCompare(b.modifiedName)),
+    userSongs: (state) =>
+      state.songs.filter((s) => s.uid === auth.currentUser?.uid),
+    userSongsListLength: (_state, getters) => {
+      console.log(getters.userSongs);
+      console.log(getters.userSongs?.length);
+      return getters.userSongs?.length;
+    },
     songsListLength: (state) => state.songs.length,
     getSongComments: (state) => (songId) => state.comments[songId],
     isPlaying: (state) => !!state.currentAudio?.playing(),

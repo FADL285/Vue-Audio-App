@@ -34,17 +34,17 @@
 <script>
 import AppUploader from "@/components/AppUploader.vue";
 import MangeSong from "@/components/manage/MangeSong.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {};
   },
   computed: {
-    ...mapState({
-      songs: (state) => state.songs.userSongs,
+    ...mapGetters({
+      userSongsListLength: "userSongsListLength",
+      songs: "userSongs",
     }),
-    ...mapGetters(["userSongsListLength"]),
   },
   components: { MangeSong, AppUploader },
   methods: {

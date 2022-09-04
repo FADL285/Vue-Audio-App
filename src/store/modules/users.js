@@ -46,7 +46,6 @@ export default {
     async logout({ commit }) {
       await signOut(auth);
       commit("toggleAuth");
-      commit("clearUserSongs");
     },
   },
   getters: {
