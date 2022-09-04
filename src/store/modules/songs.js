@@ -10,6 +10,7 @@ import {
   where,
   deleteDoc,
   addDoc,
+  increment,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import {
@@ -48,6 +49,10 @@ export default {
       const updatedSong = state.userSongs.find((s) => s.id === song.id);
       updatedSong.modifiedName = song.modifiedName;
       updatedSong.genre = song.genre;
+    },
+    updateSongCommentsCount(state, { songId }) {
+      const song = state.songs.find((s) => s.id === songId);
+      if (song) song.commentsCount++;
     },
     deleteSong(state, song) {
       state.userSongs = state.userSongs.filter((s) => s.id !== song.id);
@@ -169,9 +174,17 @@ export default {
         };
         const { id } = await addDoc(commentsCollection, comment);
         comment.id = id;
+
+        // Update song comments count
+        await updateDoc(doc(db, "songs", songId), {
+          commentsCount: increment(1),
+        });
+        commit("updateSongCommentsCount", { songId });
         commit("addComment", comment);
+        return true;
       } catch (err) {
         console.info(err);
+        return false;
       }
     },
     async fetchSongComments({ commit }, songId) {

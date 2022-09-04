@@ -61,12 +61,16 @@ export default {
   methods: {
     async submit(values, { resetForm }) {
       this.isSubmitting = true;
-      await this.$store.dispatch("addComment", {
+      const isAdded = await this.$store.dispatch("addComment", {
         songId: this.id,
         content: values.comment,
       });
-      resetForm();
-      this.toast.success("Comment added successfully");
+      if (isAdded) {
+        this.toast.success("Comment added successfully");
+        resetForm();
+      } else {
+        this.toast.error("Something went wrong");
+      }
       this.isSubmitting = false;
     },
   },
