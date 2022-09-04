@@ -46,7 +46,7 @@ const dateFormat = (timestamp) => dayjs(timestamp).fromNow();
           <time>{{ dateFormat(comment.timestamp) }}</time>
         </div>
 
-        <p>
+        <p dir="auto" class="text-start">
           {{ comment.content }}
         </p>
       </li>

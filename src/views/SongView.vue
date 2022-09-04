@@ -115,6 +115,12 @@ const playIconStatus = computed(() => {
       @sort="updateSortType"
       v-if="comments || comments?.length > 0"
     />
+    <div v-else class="text-center">
+      <p class="my-4 text-xl">
+        No Comments Found,
+        {{ isUserLoggedIn ? "Create awesome one now!" : "Login to create one" }}
+      </p>
+    </div>
   </template>
   <SpinnerIcon v-else class="mt-14" style="width: 70px; height: 70px" />
 </template>
