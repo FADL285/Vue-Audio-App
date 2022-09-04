@@ -6,6 +6,7 @@
       <VeeField
         name="name"
         type="text"
+        dir="auto"
         class="block w-full rounded border border-gray-300 py-1.5 px-3 text-gray-800 transition duration-500 focus:border-black focus:outline-none"
         placeholder="Enter Name"
       />

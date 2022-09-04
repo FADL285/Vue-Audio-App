@@ -11,6 +11,9 @@ const store = useStore();
 // Player Song Duration & CurrentTime
 const songDuration = computed(() => store.state.songs.playerSongDuration);
 const currentTime = computed(() => store.state.songs.playerSongCurrentTime);
+const playerProgress = computed(
+  () => (currentTime.value / songDuration.value) * 100
+);
 
 // play icon status
 const playIconStatus = computed(() =>
@@ -22,6 +25,9 @@ const togglePlay = () => store.dispatch("togglePlay");
 
 // Get Current Audio Info
 const currentAudio = computed(() => store.getters.getCurrentAudio);
+
+// Update Current Audio Time
+const updateCurrentTime = (event) => store.dispatch("updateCurrentTime", event);
 
 // Convert Seconds to Time Format
 const formatTime = (seconds) => dayjs.duration(seconds * 1000).format("mm:ss");
@@ -52,24 +58,28 @@ const formatTime = (seconds) => dayjs.duration(seconds * 1000).format("mm:ss");
           <div
             class="player-song-info absolute left-0 right-0 mx-auto text-center text-lg"
           >
-            <span class="song-title">{{ currentAudio?.modifiedName }}</span> by
-            <span class="song-artist">{{ currentAudio?.displayName }}</span>
+            <span class="song-title">{{ currentAudio?.modifiedName }}</span>
+            <small class="px-2">uploaded by</small>
+            <span class="song-artist italic">
+              {{ currentAudio?.displayName }}
+            </span>
           </div>
           <!-- Scrub Container  -->
           <span
             class="relative m-1 mt-2 block h-2 w-full cursor-pointer rounded bg-gray-200"
+            @click.prevent="updateCurrentTime"
           >
             <!-- Player Ball -->
             <span
-              class="top-neg-8 absolute text-lg text-gray-800"
-              style="left: 50%"
+              class="absolute -top-2.5 left-0 text-lg text-gray-800"
+              :style="{ left: playerProgress + '%' }"
             >
               <i class="fas fa-circle"></i>
             </span>
             <!-- Player Progress Bar-->
             <span
-              class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
-              style="width: 50%"
+              class="block h-2 w-0 rounded bg-gradient-to-r from-green-500 to-green-400"
+              :style="{ width: playerProgress + '%' }"
             ></span>
           </span>
         </div>

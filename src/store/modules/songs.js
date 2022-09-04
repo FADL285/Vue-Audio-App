@@ -31,8 +31,8 @@ export default {
     comments: {},
     currentPlayingSong: null,
     currentAudio: null,
-    playerSongDuration: "00:00",
-    playerSongCurrentTime: "00:00",
+    playerSongDuration: 0,
+    playerSongCurrentTime: 0,
   }),
   mutations: {
     addSong(state, song) {
@@ -65,8 +65,8 @@ export default {
         html5: true,
       });
     },
-    stopCurrentSong(state) {
-      state.currentAudio?.stop();
+    unloadCurrentSong(state) {
+      state.currentAudio?.unload();
     },
     setCurrentSongDuration(state) {
       state.playerSongDuration = state.currentAudio.duration();
@@ -143,7 +143,6 @@ export default {
         await deleteDoc(doc(db, "songs", song.id));
         await deleteObject(songRef);
         commit("deleteSong", song);
-        console.log("Delete song Successfully");
       } catch (err) {
         console.error(err);
       }
@@ -191,7 +190,7 @@ export default {
       });
     },
     playNewSong({ commit, dispatch }, song) {
-      commit("stopCurrentSong");
+      commit("unloadCurrentSong");
       commit("playNewSong", song);
       dispatch("togglePlay");
     },
@@ -211,6 +210,23 @@ export default {
       if (state.currentAudio.playing()) {
         requestAnimationFrame(() => dispatch("updateProgress"));
       }
+    },
+    //  Update Player Current Time
+    updateCurrentTime({ state, commit, dispatch }, event) {
+      if (!state.currentAudio.playing) return;
+
+      const { clientX, currentTarget } = event;
+      const { x, width } = currentTarget.getBoundingClientRect();
+      const clickX = clientX - x;
+      const percent = clickX / width;
+      const seconds = percent * state.playerSongDuration;
+      state.currentAudio.seek(seconds);
+      commit("updateCurrentSongCurrentTime");
+      state.currentAudio.once("seek", () => {
+        setTimeout(() => {
+          dispatch("updateProgress");
+        });
+      });
     },
   },
   getters: {
