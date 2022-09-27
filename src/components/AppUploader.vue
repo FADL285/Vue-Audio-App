@@ -103,6 +103,11 @@ export default {
     uploadHandler(event) {
       this.isDragOver = false;
       const { files } = event.dataTransfer || event.target;
+      if (!navigator.onLine) {
+        alert("You are offline...");
+        return;
+      }
+      console.log("UPLOADING>>>>");
       for (const file of files) {
         if (!this.supportedTypes.includes(file.type)) continue;
         if (!(file.size < this.maxFileSizeInBytes)) {

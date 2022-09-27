@@ -4,7 +4,7 @@
       <div class="border-b border-gray-200 px-6 pt-6 pb-5 font-bold">
         <!-- Comment Count -->
         <span class="card-title">
-          {{ $tc("song.commentsCount", commentsLength) }}
+          {{ $t("song.commentsCount", commentsLength) }}
         </span>
         <i class="fa fa-comments float-right text-2xl text-green-400"></i>
       </div>
