@@ -16,6 +16,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
+db.enablePersistence()
+  .then((r) => console.log("DB Persistence - ", r))
+  .catch((err) => console.error("DB Persistence - " + err.code));
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 // Initialize Cloud Storage and get a reference to the service

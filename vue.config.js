@@ -13,4 +13,8 @@ module.exports = defineConfig({
       fullInstall: true,
     },
   },
+
+  pwa: {
+    name: "Vue Music",
+  },
 });
