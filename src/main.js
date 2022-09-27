@@ -9,6 +9,8 @@ import toastificationPlugin from "@/plugins/toastification.js";
 import "./plugins/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./plugins/firebase.js";
+// Service Worker - PWA
+import "./registerServiceWorker";
 //CSS Files
 import "./assets/tailwind.css";
 import "./assets/main.css";
