@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \\\"./src/**/*.?(js|vue)\\\" --locales \\\"src/locales/**/*.json\\\""
   },
   "dependencies": {
     "@vee-validate/rules": "^4.5.11",
@@ -20,6 +21,7 @@
     "tailwindcss": "^3",
     "vee-validate": "^4.5.11",
     "vue": "^3.2.13",
+    "vue-i18n": "^9.1.0",
     "vue-router": "^4.0.3",
     "vue-toastification": "^2.0.0-rc.5",
     "vuex": "^4.0.0"
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@intlify/vue-i18n-loader": "^3.0.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
@@ -45,6 +48,7 @@
     "jest": "^27.0.5",
     "prettier": "^2.4.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
+    "vue-cli-plugin-i18n": "^2.3.1",
     "vue-cli-plugin-tailwind": "^3.0.0"
   }
 }
